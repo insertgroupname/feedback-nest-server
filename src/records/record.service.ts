@@ -27,8 +27,6 @@ export class RecordService {
   }
 
   async findOne(queryObject: any, project?: any): Promise<Record> {
-    return await this.recordModel.findOne(queryObject, {
-      projection: project || {},
-    });
+    return await this.recordModel.findOne(queryObject, project || {});
   }
 }
