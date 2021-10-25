@@ -10,6 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { HttpService } from '@nestjs/axios';
 
 import { Response } from 'express';
 import * as fs from 'fs';
@@ -24,7 +25,10 @@ import { videoUploadOption } from './video-upload.option';
 
 @Controller()
 export class RecordController {
-  constructor(private readonly recordService: RecordService) {}
+  constructor(
+    private readonly recordService: RecordService,
+    private httpService: HttpService,
+  ) {}
 
   /* landing page */
   @Get('/v2/record/:userId')
@@ -77,7 +81,11 @@ export class RecordController {
         file.originalname + '.' + file.originalname.split('.').pop();
     }
     uploadObject.videoUUID = file.filename;
-    return await this.createRecord(uploadObject);
+    const createResult = await this.createRecord(uploadObject);
+    this.httpService.post('http://python-server:5000/convert_sound', {
+      file: file.filename,
+    });
+    return createResult;
     // return 'success';
   }
 

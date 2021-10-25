@@ -2,6 +2,16 @@ import { diskStorage } from 'multer';
 import short from 'short-unique-id';
 import * as fs from 'fs';
 import * as path from 'path';
+
+type mimeVideo =
+  | 'video/mp4'
+  | 'video/ogg'
+  | 'video/mpeg'
+  | 'video/webm'
+  | 'video/x-m4v';
+
+type mimeAudio = 'audio/mpeg' | 'audio/mp4' | 'audio/ogg';
+
 export const videoUploadOption = () => ({
   storage: diskStorage({
     destination: (req: Express.Request, file: Express.Multer.File, cb: any) => {
