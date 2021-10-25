@@ -11,15 +11,18 @@ export class Record {
   userId: string;
 
   @Prop()
+  videoName: string;
+
+  @Prop()
   videoUUID: string;
 
   @Prop()
   tags: string[];
 
-  @Prop({ type: Timestamp, default: () => 'CURRENT_TIMESTAMP' })
+  @Prop({ type: Timestamp, default: () => new Date() })
   createDate: Date;
 
-  @Prop({ type: Timestamp, default: () => 'CURRENT_TIMESTAMP' })
+  @Prop({ type: Timestamp, default: () => new Date() })
   lastUpdate: Date;
 
   @Prop()

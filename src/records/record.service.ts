@@ -10,10 +10,6 @@ export class RecordService {
     private readonly recordModel: Model<RecordDocument>,
   ) {}
 
-  // async findAll(queryObject: any): Promise<Record[]> {
-  //   return await this.recordModel.find(queryObject);
-  // }
-
   async findAll(
     queryObject: any,
     project?: any,
@@ -28,5 +24,9 @@ export class RecordService {
 
   async findOne(queryObject: any, project?: any): Promise<Record> {
     return await this.recordModel.findOne(queryObject, project || {});
+  }
+
+  async insertOne(insertObject: any): Promise<Record[]> {
+    return await this.recordModel.insertMany(insertObject);
   }
 }

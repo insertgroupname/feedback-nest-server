@@ -8,7 +8,6 @@ import { Document } from 'mongoose';
 
 export type ReportDocument = Report & Document;
 
-@Schema()
 export class Report {
   @Prop()
   transcript: TranscriptInterface[];

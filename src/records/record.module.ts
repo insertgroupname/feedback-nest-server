@@ -4,6 +4,8 @@ import { RecordController } from './record.controller';
 import { Record, RecordSchema } from './record.schema';
 import { RecordService } from './record.service';
 import { Report, ReportSchema } from './report.schema';
+import { MulterModule } from '@nestjs/platform-express';
+import { videoUploadOption } from './video-upload.option';
 
 @Module({
   imports: [
@@ -11,6 +13,7 @@ import { Report, ReportSchema } from './report.schema';
       { name: Record.name, schema: RecordSchema },
       { name: Report.name, schema: ReportSchema },
     ]),
+    // MulterModule.registerAsync({}),
   ],
   providers: [RecordService],
   controllers: [RecordController],
