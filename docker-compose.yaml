@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+
+  nestjsserver:
+    build: .
+    hostname: nestjs-server
+    volumes:
+      - type: bind
+        source: ./upload
+        target: /usr/app/upload
+      - type: bind
+        source: ./src
+        target: /usr/app/src
+    restart: 'unless-stopped'
+    networks:
+      - backend
+      - proxy
+
+  proxy:
+    depends_on: [nestjsserver]
+    image: nginx:alpine
+    hostname: proxy-server
+    container_name: proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: 'unless-stopped'
+    ports:
+      - 81:80
+    networks:
+      - backend
+      - frontend
+      - proxy
+    
+networks:
+  backend:
+    name: custom-backend
+  frontend:
+    name: custom-frontend
+  proxy:
+    name: custom-proxy

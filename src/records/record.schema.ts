@@ -28,6 +28,7 @@ export class Record {
   @Prop()
   status: string;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @Prop((type) => Report)
   report?: Report;
 }
