@@ -5,15 +5,22 @@ import {
   HttpCode,
   Param,
   Post,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+
+import { Response } from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
+
+import short from 'short-unique-id';
+
 import { Record } from './record.schema';
 import { RecordService } from './record.service';
 import { RecordInterface } from './record.interface';
 import { videoUploadOption } from './video-upload.option';
-import short from 'short-unique-id';
 
 @Controller()
 export class RecordController {
@@ -33,12 +40,12 @@ export class RecordController {
   /* specific video */
   @Get('/v2/record/:userId/:videoUUID')
   async selectRecord(
-    @Param('videoUUID') videoUUID: string,
     @Param('userId') userId: string,
+    @Param('videoUUID') videoUUID: string,
   ): Promise<Record> {
     return await this.recordService.findOne({
       userId: userId,
-      videoUUID: videoUUID,
+      videoUUID: new RegExp(videoUUID, 'i'),
     });
   }
 
@@ -56,6 +63,7 @@ export class RecordController {
   async createRecord(body: any) {
     return await this.recordService.insertOne(body);
   }
+
   /* upload */
   @Post('/v2/upload')
   @HttpCode(201)
@@ -72,5 +80,27 @@ export class RecordController {
     return await this.createRecord(uploadObject);
     // return 'success';
   }
+
   /* streaming */
+  @Get('/v2/streaming/:userId/:videoUUID')
+  async streamingFile(
+    @Res() res: Response,
+    @Param('userId') userId: string,
+    @Param('videoUUID') videoUUID: string,
+  ) {
+    const targetExt = 'mp4';
+    const result = await this.recordService.findOne({
+      userId: userId,
+      videoUUID: new RegExp(videoUUID, 'i'),
+    });
+    if (result) {
+      const file = fs.createReadStream(
+        path.join('upload', 'video', videoUUID + '.' + targetExt),
+      );
+      res.writeHead(206, 'streaming');
+      return file.pipe(res);
+    } else {
+      return res.json({ message: 'content unavailable' });
+    }
+  }
 }
