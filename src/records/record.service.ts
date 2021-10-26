@@ -29,4 +29,8 @@ export class RecordService {
   async insertOne(insertObject: any): Promise<Record[]> {
     return await this.recordModel.insertMany(insertObject);
   }
+
+  async updateOne(filterObject: any, updateObject: any) {
+    return await this.recordModel.updateOne(filterObject, updateObject);
+  }
 }

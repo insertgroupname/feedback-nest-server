@@ -5,4 +5,5 @@ export interface RecordInterface {
   tags: string[];
   createDate?: Date;
   lastUpdate?: Date;
+  status?: string;
 }

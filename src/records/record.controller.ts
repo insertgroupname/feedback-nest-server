@@ -4,18 +4,19 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
+  Req,
   Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { HttpService } from '@nestjs/axios';
 
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
-
+import axios from 'axios';
 import short from 'short-unique-id';
 
 import { Record } from './record.schema';
@@ -25,13 +26,34 @@ import { videoUploadOption } from './video-upload.option';
 
 @Controller()
 export class RecordController {
-  constructor(
-    private readonly recordService: RecordService,
-    private httpService: HttpService,
-  ) {}
+  constructor(private readonly recordService: RecordService) {}
+
+  /* record tag */
+  @Get('/v2/record/tag/:userId/')
+  async findByTag(
+    @Param('userId') userId: string,
+    @Req() req: Request,
+  ): Promise<Record[]> {
+    return await this.recordService.findAll({
+      userId: userId,
+      tags: req.query.tag,
+    });
+  }
+  /* update tag */
+  @Patch('/v2/record/report/:userId/:videoUUID')
+  async updateTag(
+    @Param('userId') userId,
+    @Param('videoUUID') videoUUID,
+    @Req() req: Request,
+  ) {
+    return this.recordService.updateOne(
+      { userId: userId, videoUUID: new RegExp(videoUUID, 'i') },
+      { $set: { tags: req.body.tags } },
+    );
+  }
 
   /* landing page */
-  @Get('/v2/record/:userId')
+  @Get('/v2/record/landing/:userId')
   async landingPage(@Param('userId') userId: string): Promise<Record[]> {
     console.log(userId);
     return await this.recordService.findAll(
@@ -42,7 +64,7 @@ export class RecordController {
   }
 
   /* specific video */
-  @Get('/v2/record/:userId/:videoUUID')
+  @Get('/v2/record/report/:userId/:videoUUID')
   async selectRecord(
     @Param('userId') userId: string,
     @Param('videoUUID') videoUUID: string,
@@ -53,19 +75,13 @@ export class RecordController {
     });
   }
 
-  /* */
-  // @Get('/v2/record/:userId/:tag')
-  // async findTag(): Promise<Record> {
-  //   return await this.recordService.findOne({});
-  // }
-  @Get('/uuid')
+  @Get('/v2/uuid')
   getUUID() {
     return new short({ length: 32 })();
-    // return shortUUID.generate();
   }
 
-  async createRecord(body: any) {
-    return await this.recordService.insertOne(body);
+  async createRecord(uploadDetail: RecordInterface) {
+    return await this.recordService.insertOne(uploadDetail);
   }
 
   /* upload */
@@ -74,19 +90,21 @@ export class RecordController {
   @UseInterceptors(FileInterceptor('file', videoUploadOption()))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    @Body() uploadObject: RecordInterface,
+    @Body() uploadDetail: RecordInterface,
   ) {
-    if (!uploadObject.videoName) {
-      uploadObject.videoName =
+    if (!uploadDetail.videoName) {
+      uploadDetail.videoName =
         file.originalname + '.' + file.originalname.split('.').pop();
     }
-    uploadObject.videoUUID = file.filename;
-    const createResult = await this.createRecord(uploadObject);
-    this.httpService.post('http://python-server:5000/convert_sound', {
-      file: file.filename,
+    uploadDetail.videoUUID = file.filename;
+    uploadDetail.status = 'waiting_for_process_transcript';
+    const createResult = await this.createRecord(uploadDetail);
+    axios({
+      method: 'post',
+      url: `http://python-server:5000/convert_sound`,
+      params: { file_name: file.filename },
     });
     return createResult;
-    // return 'success';
   }
 
   /* streaming */
