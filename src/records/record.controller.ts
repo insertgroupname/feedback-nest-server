@@ -19,7 +19,7 @@ import * as path from 'path';
 import axios from 'axios';
 import short from 'short-unique-id';
 
-import { Record } from './record.schema';
+import { Record } from './schemas/record.schema';
 import { RecordService } from './record.service';
 import { RecordInterface } from './record.interface';
 import { videoUploadOption } from './video-upload.option';
@@ -39,6 +39,7 @@ export class RecordController {
       tags: req.query.tag,
     });
   }
+
   /* update tag */
   @Patch('/v2/record/report/:userId/:videoUUID')
   async updateTag(

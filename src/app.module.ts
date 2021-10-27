@@ -9,12 +9,16 @@ import { dbConfig } from './configs/db.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RecordModule } from './records/record.module';
+// import { UserModule } from './users/user.module';
+// import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(dbConfig().connectionString),
     RecordModule,
+    // UserModule,
+    // AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

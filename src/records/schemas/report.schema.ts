@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import {
   PostProcessingInterface,
   TranscriptInterface,
-} from './report.interface';
+} from '../report.interface';
 
 import { Document } from 'mongoose';
 

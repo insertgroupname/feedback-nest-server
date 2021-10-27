@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, QueryOptions } from 'mongoose';
-import { Record, RecordDocument } from './record.schema';
+import { Record, RecordDocument } from './schemas/record.schema';
 
 @Injectable()
 export class RecordService {
@@ -24,6 +24,10 @@ export class RecordService {
 
   async findOne(queryObject: any, project?: any): Promise<Record> {
     return await this.recordModel.findOne(queryObject, project || {});
+  }
+
+  async findById(id: string): Promise<Record> {
+    return await this.recordModel.findById(id);
   }
 
   async insertOne(insertObject: any): Promise<Record[]> {

@@ -3,18 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { RecordController } from './record.controller';
 
-import { Record, RecordSchema } from './record.schema';
-import { Report, ReportSchema } from './report.schema';
+import { Record, RecordSchema } from './schemas/record.schema';
 
 import { RecordService } from './record.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Record.name, schema: RecordSchema },
-      { name: Report.name, schema: ReportSchema },
-    ]),
-    // MulterModule.registerAsync({}),
+    MongooseModule.forFeature([{ name: Record.name, schema: RecordSchema }]),
   ],
   providers: [RecordService],
   controllers: [RecordController],
