@@ -7,16 +7,17 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { LoginDto } from './dto/login-user.dto';
-import { AuthService } from 'src/auth/auth.service';
 import bcrypt from 'bcrypt';
-import { ExpressAdapter } from '@nestjs/platform-express';
 
-@Controller('users')
-export class UsersController {
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UpdateUserDto } from '../user/dto/update-user.dto';
+import { LoginDto } from '../user/dto/login-user.dto';
+
+import { UserService } from '../user/user.service';
+import { AuthService } from 'src/auth/auth.service';
+
+@Controller()
+export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,

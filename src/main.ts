@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import cookieParser from 'cookie-parser';
-
+import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 
 import { appConfig } from './configs';
@@ -20,8 +19,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/docs', app, document);
-
-  console.log(`server started on port ${appConfig().port}`);
-  await app.listen(appConfig().port);
+  const appConfigExtract = appConfig();
+  console.log(`server started on port ${appConfigExtract.port}`);
+  await app.listen(appConfigExtract.port);
 }
 bootstrap();
