@@ -1,8 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from 'src/user/dto/login-user.dto';
 import { UserService } from '../user/user.service';
-import bcrypt from 'bcrypt';
+import { Payload } from './payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -11,9 +10,11 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(payload: any): Promise<any> {
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async signPayload(payload: Payload) {
+    return this.jwtService.sign(payload);
+  }
+
+  async validateUser(payload: Payload) {
+    return await this.userService.findOne(payload);
   }
 }

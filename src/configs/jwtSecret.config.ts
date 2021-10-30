@@ -1,3 +1,1 @@
-export const jwtSecret = () => {
-  process.env.JWT_SECRET;
-};
+export const jwtConfig = () => ({ jwtSecret: process.env.JWT_SECRET });

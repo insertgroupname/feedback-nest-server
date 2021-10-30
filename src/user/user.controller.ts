@@ -25,8 +25,16 @@ export class UsersController {
   ) {}
 
   @Post('/v2/register')
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.findOne({
+      email: createUserDto.email,
+    });
+    if (user) {
+      throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
+    }
+    const token = await this.authService.signPayload(createUserDto);
+    delete createUserDto.password;
+    return { createUserDto, token };
   }
 
   @Post('/v2/login')
@@ -37,7 +45,9 @@ export class UsersController {
       user.password &&
       (await bcrypt.compare(loginDto.password, user.password))
     ) {
-      return this.authService.login(loginDto);
+      const token = await this.authService.signPayload(loginDto);
+      delete loginDto.password;
+      return { loginDto, token };
     }
 
     throw new HttpException(
