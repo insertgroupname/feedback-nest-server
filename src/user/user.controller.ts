@@ -1,21 +1,19 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
   HttpException,
   HttpStatus,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginDto } from './dto/login-user.dto';
 import { AuthService } from 'src/auth/auth.service';
 import bcrypt from 'bcrypt';
+import { ExpressAdapter } from '@nestjs/platform-express';
 
 @Controller('users')
 export class UsersController {
@@ -38,7 +36,7 @@ export class UsersController {
   }
 
   @Post('/v2/login')
-  async login(@Body() loginDto: LoginDto) {
+  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const user = await this.userService.findOne({ email: loginDto.email });
     if (
       user &&
@@ -46,8 +44,10 @@ export class UsersController {
       (await bcrypt.compare(loginDto.password, user.password))
     ) {
       const token = await this.authService.signPayload(loginDto);
-      delete loginDto.password;
-      return { loginDto, token };
+      delete user.password;
+      res.cookie('jwt', token, { maxAge: 86400000 });
+
+      return user;
     }
 
     throw new HttpException(

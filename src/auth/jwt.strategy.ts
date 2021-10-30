@@ -16,7 +16,7 @@ const extractJwtFromCookie = (req) => {
 };
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwtStrategy') {
   constructor(private authService: AuthService) {
     super({
       jwtFromRequest: extractJwtFromCookie,
@@ -38,7 +38,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new HttpException('unauthorized', HttpStatus.UNAUTHORIZED);
     }
-    delete user.password;
-    return user;
+    return { email: user.email };
   }
 }

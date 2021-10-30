@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 
@@ -9,6 +10,7 @@ async function bootstrap() {
   const appOption = { cors: true };
   const app = await NestFactory.create(AppModule, appOption);
   app.setGlobalPrefix('api');
+  app.use(cookieParser());
 
   const config = new DocumentBuilder()
     .setTitle('NestJS Realworld Example App')
