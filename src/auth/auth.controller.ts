@@ -7,7 +7,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
@@ -24,16 +24,17 @@ export class AuthController {
   ) {}
 
   @Post('/v2/register')
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     const user = await this.userService.findOne({
       email: createUserDto.email,
     });
     if (user) {
       throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
     }
+    const createdUser = await this.userService.create(createUserDto);
     const token = await this.authService.signPayload(createUserDto);
-    delete createUserDto.password;
-    return { createUserDto, token };
+    res.cookie('jwt', token, { maxAge: 86400000 });
+    return res.json({ createdUser });
   }
 
   @Post('/v2/login')
@@ -45,10 +46,11 @@ export class AuthController {
       (await bcrypt.compare(loginDto.password, user.password))
     ) {
       const token = await this.authService.signPayload(loginDto);
-      delete user.password;
+      const userObj = user.toObject();
+      delete userObj['password'];
       res.cookie('jwt', token, { maxAge: 86400000 });
 
-      return user;
+      return res.json({ userObj });
     }
 
     throw new HttpException(

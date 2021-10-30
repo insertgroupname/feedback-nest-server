@@ -9,7 +9,9 @@ import { RecordService } from './record.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Record.name, schema: RecordSchema }]),
+    MongooseModule.forFeature([
+      { name: Record.name, schema: RecordSchema, collection: 'records' },
+    ]),
   ],
   providers: [RecordService],
   controllers: [RecordController],
