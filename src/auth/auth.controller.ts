@@ -31,10 +31,14 @@ export class AuthController {
     if (user) {
       throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
     }
-    const createdUser = await this.userService.create(createUserDto);
-    const token = await this.authService.signPayload(createUserDto);
+    const createdUserObj = await this.userService.create(createUserDto);
+    const token = await this.authService.signPayload({
+      email: createdUserObj.email,
+      userId: createdUserObj._id,
+    });
+    delete createdUserObj['_id'];
     res.cookie('jwt', token, { maxAge: 86400000 });
-    return res.json({ createdUser });
+    return res.json({ createdUser: createdUserObj });
   }
 
   @Post('/v2/login')
@@ -45,11 +49,15 @@ export class AuthController {
       user.password &&
       (await bcrypt.compare(loginDto.password, user.password))
     ) {
-      const token = await this.authService.signPayload(loginDto);
       const userObj = user.toObject();
+      const token = await this.authService.signPayload({
+        email: userObj.email,
+        userId: userObj._id,
+      });
       delete userObj['password'];
-      res.cookie('jwt', token, { maxAge: 86400000 });
+      delete userObj['_id'];
 
+      res.cookie('jwt', token, { maxAge: 86400000 });
       return res.json({ userObj });
     }
 
