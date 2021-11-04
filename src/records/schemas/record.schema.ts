@@ -17,6 +17,9 @@ export class Record {
   videoUUID: string;
 
   @Prop()
+  description: string;
+
+  @Prop()
   tags: string[];
 
   @Prop({ type: Timestamp, default: () => new Date() })
