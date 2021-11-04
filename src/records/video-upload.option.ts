@@ -2,15 +2,18 @@ import { diskStorage } from 'multer';
 import short from 'short-unique-id';
 import * as fs from 'fs';
 import * as path from 'path';
+import { BadRequestException } from '@nestjs/common';
 
-type mimeVideo =
-  | 'video/mp4'
-  | 'video/ogg'
-  | 'video/mpeg'
-  | 'video/webm'
-  | 'video/x-m4v';
-
-type mimeAudio = 'audio/mpeg' | 'audio/mp4' | 'audio/ogg';
+const validMime = [
+  'video/mp4',
+  'video/ogg',
+  'video/mpeg',
+  'video/webm',
+  'video/x-m4v',
+  'audio/mpeg',
+  'audio/mp4',
+  'audio/mp3',
+];
 
 export const videoUploadOption = () => ({
   storage: diskStorage({
@@ -34,15 +37,8 @@ export const videoUploadOption = () => ({
     file: Express.Multer.File,
     cb: any,
   ) => {
-    const extension = file.originalname.split('.').pop();
-    if (
-      extension !== 'mkv' &&
-      extension !== 'mp4' &&
-      extension !== 'flv' &&
-      extension !== 'flac' &&
-      extension !== 'mp3'
-    ) {
-      return cb(new Error('File type is not video'));
+    if (!validMime.includes(file.mimetype)) {
+      return cb(new BadRequestException('File type is not video'));
     }
     return cb(null, true);
   },
