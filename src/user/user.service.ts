@@ -21,12 +21,15 @@ export class UserService {
     return sanitizedUser;
   }
 
+  async updateOne(filterObject: any, updateObject: any) {
+    return await this.userModel.updateOne(filterObject, updateObject);
+  }
+
   async findOne(queryObj: any) {
     return this.userModel.findOne(queryObj);
   }
 
   async findById(id: string): Promise<User> {
-    console.log('findByID');
     return this.userModel.findById(id);
   }
 

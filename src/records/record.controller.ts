@@ -23,7 +23,7 @@ import axios from 'axios';
 
 import { Record } from './schemas/record.schema';
 import { RecordService } from './record.service';
-import { RecordInterface } from './record.interface';
+import { RecordInterface, UpdateInterface } from './record.interface';
 import { videoUploadOption } from './video-upload.option';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 
@@ -43,10 +43,13 @@ export class RecordController {
   @UseGuards(JwtAuthGuard)
   async findByTag(@Req() req: any): Promise<Record[] | Error> {
     const requestedDocument = this.checkNull(
-      await this.recordService.findAll({
-        userId: req.user.userId,
-        tags: req.query.tag,
-      }),
+      await this.recordService.findAll(
+        {
+          userId: req.user.userId,
+          tags: req.query.tag,
+        },
+        { userId: 0 },
+      ),
     );
     return requestedDocument;
   }
@@ -54,10 +57,14 @@ export class RecordController {
   /* update tag */
   @Patch('/v2/record/report/:videoUUID')
   @UseGuards(JwtAuthGuard)
-  async updateTag(@Param('videoUUID') videoUUID, @Req() req: any) {
+  async updateTag(
+    @Param('videoUUID') videoUUID,
+    @Req() req: any,
+    @Body() updateBody: UpdateInterface,
+  ) {
     return await this.recordService.updateOne(
       { userId: req.user.userId, videoUUID: new RegExp(videoUUID, 'i') },
-      { $set: { tags: req.body.tags } },
+      { $set: { ...updateBody } },
     );
   }
 
@@ -68,7 +75,7 @@ export class RecordController {
     const requestedDocument = this.checkNull(
       await this.recordService.findAll(
         { userId: req.user.userId },
-        { report: 0 },
+        { report: 0, userId: 0 },
         { createDate: -1 },
       ),
     );
@@ -83,12 +90,14 @@ export class RecordController {
     @Param('videoUUID') videoUUID: string,
     @Req() req: any,
   ): Promise<Record> {
-    console.log(req.user.userId);
     const requestedDocument = this.checkNull(
-      await this.recordService.findOne({
-        userId: req.user.userId,
-        videoUUID: new RegExp(videoUUID, 'i'),
-      }),
+      await this.recordService.findOne(
+        {
+          userId: req.user.userId,
+          videoUUID: new RegExp(videoUUID, 'i'),
+        },
+        { userId: 0 },
+      ),
     );
     return requestedDocument;
   }
@@ -142,8 +151,6 @@ export class RecordController {
         'video',
         videoUUID + '.' + targetExt,
       );
-      console.log(filePath);
-      console.log(fs.existsSync(filePath));
       if (fs.existsSync(filePath)) {
         const file = fs.createReadStream(
           path.join('upload', 'video', videoUUID + '.' + targetExt),

@@ -1,11 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import * as fs from 'fs';
+
 import { AppModule } from './app.module';
 
 import { appConfig } from './configs';
 
 async function bootstrap() {
+  const videoDir = 'upload/video';
+  const audioDir = 'upload/audio';
+  if (!fs.existsSync(videoDir) || !fs.existsSync(audioDir)) {
+    fs.promises.mkdir(videoDir, { recursive: true });
+    fs.promises.mkdir(audioDir, { recursive: true });
+  }
+
   const appOption = { cors: true };
   const app = await NestFactory.create(AppModule, appOption);
   app.setGlobalPrefix('api');

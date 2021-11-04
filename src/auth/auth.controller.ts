@@ -5,6 +5,10 @@ import {
   HttpException,
   HttpStatus,
   Res,
+  Param,
+  Patch,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
@@ -12,9 +16,11 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
 import { LoginDto } from '../user/dto/login-user.dto';
-
+import * as mongoose from 'mongoose';
 import { UserService } from '../user/user.service';
 import { AuthService } from 'src/auth/auth.service';
+import { UpdateInterface } from 'src/user/user.interface';
+import { JwtAuthGuard } from './jwt.auth-guard';
 
 @Controller()
 export class AuthController {
@@ -64,6 +70,15 @@ export class AuthController {
     throw new HttpException(
       `invalid credential or user doesn't exist`,
       HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  @Patch('/v2/user/edit')
+  @UseGuards(JwtAuthGuard)
+  async updateTag(@Req() req: any, @Body() updateBody: UpdateInterface) {
+    return await this.userService.updateOne(
+      { _id: req.user.userId },
+      { $set: { ...updateBody } },
     );
   }
 }
