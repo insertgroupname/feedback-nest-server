@@ -10,7 +10,7 @@ export interface RecordInterface {
 }
 
 export interface UpdateInterface {
-  videoName: string;
-  tags: string[];
+  videoName?: string;
+  tags?: string[];
   description?: string;
 }
