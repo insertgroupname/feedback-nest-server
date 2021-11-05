@@ -15,8 +15,11 @@ async function bootstrap() {
     fs.promises.mkdir(audioDir, { recursive: true });
   }
 
-  const appOption = { cors: true };
-  const app = await NestFactory.create(AppModule, appOption);
+  const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  });
   app.setGlobalPrefix('api');
   app.use(cookieParser());
 
