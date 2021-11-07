@@ -1,7 +1,6 @@
-version: "3.8"
+version: '3.8'
 
 services:
-
   nestjsserver:
     build: .
     hostname: nestjs-server
@@ -12,6 +11,9 @@ services:
       - type: bind
         source: ./src
         target: /usr/app/src
+      - type: bind
+        source: .env
+        target: /usr/app/.env
     restart: 'unless-stopped'
     networks:
       - backend
@@ -31,7 +33,7 @@ services:
       - backend
       - frontend
       - proxy
-    
+
 networks:
   backend:
     name: custom-backend

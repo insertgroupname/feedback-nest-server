@@ -64,7 +64,7 @@ export class RecordController {
   ) {
     return await this.recordService.updateOne(
       { userId: req.user.userId, videoUUID: new RegExp(videoUUID, 'i') },
-      { $set: { ...updateBody } },
+      { $set: { ...updateBody, lastUpdate: new Date() } },
     );
   }
 
@@ -140,20 +140,16 @@ export class RecordController {
     @Res() res: Response,
     @Param('videoUUID') videoUUID: string,
   ) {
-    const targetExt = 'mp4';
+    // const targetExt = 'mp4';
     const result = await this.recordService.findOne({
       userId: req.user.userId,
       videoUUID: new RegExp(videoUUID, 'i'),
     });
     if (result) {
-      const filePath = path.join(
-        'upload',
-        'video',
-        videoUUID + '.' + targetExt,
-      );
+      const filePath = path.join('upload', 'video', videoUUID);
       if (fs.existsSync(filePath)) {
         const file = fs.createReadStream(
-          path.join('upload', 'video', videoUUID + '.' + targetExt),
+          path.join('upload', 'video', videoUUID),
         );
         res.writeHead(206, 'streaming');
         return file.pipe(res);
