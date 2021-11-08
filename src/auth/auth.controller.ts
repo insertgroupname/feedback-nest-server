@@ -73,21 +73,15 @@ export class AuthController {
     );
   }
 
-  @Patch('/v2/user/stopwords')
+  @Patch('/v2/user/edit')
   @UseGuards(JwtAuthGuard)
-  async updateStopwords(@Req() req: any, @Body() updateBody: UpdateInterface) {
+  async updateStopwordOrTags(
+    @Req() req: any,
+    @Body() updateBody: UpdateInterface,
+  ) {
     return await this.userService.updateOne(
       { _id: req.user.userId },
-      { $set: { stopwords: updateBody.stopwords } },
-    );
-  }
-
-  @Patch('/v2/user/tags')
-  @UseGuards(JwtAuthGuard)
-  async updateTags(@Req() req: any, @Body() updateBody: UpdateInterface) {
-    return await this.userService.updateOne(
-      { _id: req.user.userId },
-      { $set: { tags: updateBody.tags } },
+      { $set: { ...updateBody } },
     );
   }
 }
