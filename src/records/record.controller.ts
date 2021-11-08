@@ -6,6 +6,7 @@ import {
   Get,
   GoneException,
   HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -109,6 +110,7 @@ export class RecordController {
   }
 
   @Delete('/v2/record/report/:videoUUID')
+  @HttpCode(201)
   @UseGuards(JwtAuthGuard)
   async deleteRecord(@Param('videoUUID') videoUUID: string, @Req() req: any) {
     const result = this.recordService.findOneAndDelete({
@@ -116,17 +118,19 @@ export class RecordController {
       videoUUID: new RegExp(videoUUID, 'i'),
     });
     if (result) {
-      glob(`upload/**/${videoUUID}.*`, function (er, files) {
-        for (const file of files) {
-          fs.unlinkSync(file);
-        }
-      });
-      axios({
-        method: 'post',
-        url: `http://python-server:5000/delete_record`,
-        params: { videoUUID: videoUUID },
-      });
+      return 'delete succussfully';
+      // glob(`upload/**/${videoUUID}.*`, function (er, files) {
+      //   for (const file of files) {
+      //     fs.unlinkSync(file);
+      //   }
+      // });
+      // axios({
+      //   method: 'post',
+      //   url: `http://python-server:5000/delete_record`,
+      //   params: { videoUUID: videoUUID },
+      // });
     }
+    return 'nothing has been deleted';
   }
 
   /* upload */
