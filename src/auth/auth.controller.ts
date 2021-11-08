@@ -52,7 +52,7 @@ export class AuthController {
   async getUserData(@Req() req: any) {
     const result = await this.userService.findOne(
       {
-        userId: req.user.userId,
+        _id: req.user.userId,
       },
       { password: 0, _id: 0 },
     );
