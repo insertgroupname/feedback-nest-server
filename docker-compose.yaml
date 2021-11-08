@@ -30,14 +30,12 @@ services:
     ports:
       - 81:80
     networks:
-      - backend
-      - frontend
+      - external-backend
       - proxy
 
 networks:
-  backend:
-    name: custom-backend
-  frontend:
-    name: custom-frontend
+  external-backend:
+    external:
+      name: custom-backend
   proxy:
     name: custom-proxy

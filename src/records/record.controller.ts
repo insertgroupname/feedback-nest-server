@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   GoneException,
   HttpCode,
@@ -20,6 +21,7 @@ import { Request, Response } from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
+import glob from 'glob';
 
 import { Record } from './schemas/record.schema';
 import { RecordService } from './record.service';
@@ -104,6 +106,27 @@ export class RecordController {
 
   async createRecord(uploadDetail: RecordInterface) {
     return await this.recordService.insertOne(uploadDetail);
+  }
+
+  @Delete('/v2/record/report/:videoUUID')
+  @UseGuards(JwtAuthGuard)
+  async deleteRecord(@Param('videoUUID') videoUUID: string, @Req() req: any) {
+    const result = this.recordService.findOneAndDelete({
+      userId: req.user.userId,
+      videoUUID: new RegExp(videoUUID, 'i'),
+    });
+    if (result) {
+      glob(`upload/**/${videoUUID}.*`, function (er, files) {
+        for (const file of files) {
+          fs.unlinkSync(file);
+        }
+      });
+      axios({
+        method: 'post',
+        url: `http://python-server:5000/delete_record`,
+        params: { videoUUID: videoUUID },
+      });
+    }
   }
 
   /* upload */

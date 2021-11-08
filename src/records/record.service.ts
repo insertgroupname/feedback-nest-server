@@ -37,4 +37,8 @@ export class RecordService {
   async updateOne(filterObject: any, updateObject: any) {
     return await this.recordModel.updateOne(filterObject, updateObject);
   }
+
+  async findOneAndDelete(filterObject: any) {
+    return await this.recordModel.findOneAndDelete(filterObject);
+  }
 }
