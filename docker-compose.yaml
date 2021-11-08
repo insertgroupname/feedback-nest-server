@@ -16,7 +16,7 @@ services:
         target: /usr/app/.env
     restart: 'unless-stopped'
     networks:
-      - backend
+      - external-backend
       - proxy
 
   proxy:
