@@ -25,8 +25,8 @@ export class UserService {
     return await this.userModel.updateOne(filterObject, updateObject);
   }
 
-  async findOne(queryObj: any) {
-    return this.userModel.findOne(queryObj);
+  async findOne(queryObj: any, projectionObj?: any) {
+    return this.userModel.findOne(queryObj, projectionObj);
   }
 
   async findById(id: string): Promise<User> {
