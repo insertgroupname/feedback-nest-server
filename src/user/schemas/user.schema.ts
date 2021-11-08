@@ -11,7 +11,11 @@ export class User {
   @Prop()
   username: string;
 
-  @Prop()
+  @Prop({
+    default: () => {
+      ['public speaking', 'rehearsal', 'presentation'];
+    },
+  })
   tags: string[];
 
   @Prop()
