@@ -19,7 +19,11 @@ export class Record {
   @Prop()
   description: string;
 
-  @Prop()
+  @Prop({
+    default: () => {
+      ['public speaking', 'rehearsal', 'presentation'];
+    },
+  })
   tags: string[];
 
   @Prop({ type: Timestamp, default: () => new Date() })
