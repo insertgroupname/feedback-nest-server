@@ -149,6 +149,7 @@ export class RecordController {
     }
     uploadDetail.userId = req.user.userId;
     uploadDetail.videoUUID = file.filename;
+    uploadDetail.stopwords = req.user.stopwords;
     uploadDetail.status = 'waiting_for_process_transcript';
     const createResult = await this.createRecord(uploadDetail);
     axios({

@@ -3,6 +3,7 @@ export interface RecordInterface {
   videoName: string;
   videoUUID: string;
   tags: string[];
+  stopwords: string[];
   description?: string;
   createDate?: Date;
   lastUpdate?: Date;

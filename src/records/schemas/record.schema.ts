@@ -22,6 +22,9 @@ export class Record {
   @Prop()
   tags: string[];
 
+  @Prop()
+  stopwords: string[];
+
   @Prop({ type: Timestamp, default: () => new Date() })
   createDate: Date;
 

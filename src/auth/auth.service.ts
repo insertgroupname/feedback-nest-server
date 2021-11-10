@@ -16,6 +16,6 @@ export class AuthService {
 
   async validateUser(payload: Payload) {
     const user = await this.userService.findById(payload.userId);
-    return { userId: user['_id'].toString(), email: user['email'] };
+    return { userId: user['_id'].toString(), email: user['email'], stopwords: user['stopwords'] };
   }
 }
