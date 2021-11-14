@@ -13,5 +13,6 @@ import { RecordService } from './record.service';
   ],
   providers: [RecordService],
   controllers: [RecordController],
+  exports: [RecordService],
 })
 export class RecordModule {}

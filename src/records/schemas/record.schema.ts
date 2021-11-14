@@ -25,10 +25,10 @@ export class Record {
   @Prop()
   stopwords: string[];
 
-  @Prop({ type: Timestamp, default: () => new Date() })
+  @Prop({ default: () => new Date() })
   createDate: Date;
 
-  @Prop({ type: Timestamp, default: () => new Date() })
+  @Prop({ default: () => new Date() })
   lastUpdate: Date;
 
   @Prop()
