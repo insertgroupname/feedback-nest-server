@@ -14,11 +14,12 @@ export interface PostProcessingInterface {
   avg_wpm: number;
   silence: { total_silence: number; silence_list: [] };
   // eslint-disable-next-line @typescript-eslint/ban-types
-  hesiation_: { marker: object; totalcount: string };
+  hestiation_: { marker: object; total_count: string };
+  hestiation_duration: number;
   total_words: number;
   word_frequency: { word: []; bigram: [] };
   // eslint-disable-next-line @typescript-eslint/ban-types
   vocab: object;
-  len_unique_word: number;
+  repeat_list: object;
   keyword: string[];
 }

@@ -35,7 +35,7 @@ export class Record {
   status: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @Prop((type) => Report)
+  @Prop({ type: Report })
   report?: Report;
 }
 

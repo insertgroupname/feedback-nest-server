@@ -12,8 +12,8 @@ export class Report {
   @Prop()
   transcript: TranscriptInterface[];
 
-  @Prop()
-  postProcessing: PostProcessingInterface[];
+  @Prop({type: Object})
+  postProcessing: PostProcessingInterface;
 }
 
 export const ReportSchema = SchemaFactory.createForClass(Report);

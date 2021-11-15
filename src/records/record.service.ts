@@ -14,7 +14,7 @@ export class RecordService {
     queryObject: any,
     project?: any,
     queryOptions?: QueryOptions,
-  ): Promise<Record[]> {
+  ): Promise<RecordDocument[]> {
     return await this.recordModel.find(
       queryObject,
       project || {},

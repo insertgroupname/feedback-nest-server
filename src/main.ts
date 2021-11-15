@@ -2,10 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import * as fs from 'fs';
-
-import { AppModule } from './app.module';
-
 import { appConfig } from './configs';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const videoDir = 'upload/video';
