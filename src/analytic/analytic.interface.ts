@@ -26,7 +26,7 @@ export interface AllVideoAnalyticInterface {
   disfluencyPerSilence: {
     videoUUID: string;
     silenceDuration: number;
-    videoLength: number;
+    disfluencyDuration: number;
     disfluencyPersilenceDuration: number;
   }[];
   disfluencyPerVideoLength: {
