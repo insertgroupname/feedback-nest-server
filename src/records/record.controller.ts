@@ -96,7 +96,10 @@ export class RecordController {
   @UseGuards(JwtAuthGuard)
   async getUserAnalytic(@Req() req: any) {
     const tag = req.query.tag;
-    const queryObject = !tag || tag === 'all' ? {} : { tags: req.query.tag };
+    const queryObject =
+      !tag || tag === 'all'
+        ? { userId: req.user.userId }
+        : { userId: req.user.userId, tags: req.query.tag };
     const recordBytagsList = await this.recordService.findAll(
       queryObject,
       { 'report.postProcessing': 1 },
