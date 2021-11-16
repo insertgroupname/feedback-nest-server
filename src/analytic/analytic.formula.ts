@@ -11,6 +11,11 @@ export const sumDisfluencyCount = (
   postProcessing: PostProcessingInterface,
 ) => sum + postProcessing.hestiation_.total_count;
 
+export const sumDisfluencyPerTotalWords = (
+  sum,
+  postProcessing: PostProcessingInterface,
+) => sum + postProcessing.hestiation_.total_count / postProcessing.total_words;
+
 export const sumDisfluencyPerVideoLength = (
   sum,
   postProcessing: PostProcessingInterface,
@@ -41,22 +46,32 @@ export const analyticAverageFunction = (
 export const doAllAverage = (postProcessingList: PostProcessingInterface[]) => {
   const analyticObject: AnalyticInterface = {
     avgWPM: analyticAverageFunction(sumAvgWPM, postProcessingList),
+
     avgDisfluencyCount: analyticAverageFunction(
       sumDisfluencyCount,
       postProcessingList,
     ),
+
+    avgDisfluencyPerTotalWord: analyticAverageFunction(
+      sumDisfluencyPerTotalWords,
+      postProcessingList,
+    ),
+
     avgDisfluencyPerVideoLength: analyticAverageFunction(
       sumDisfluencyPerVideoLength,
       postProcessingList,
     ),
+
     avgDisfluencyPerSilence: analyticAverageFunction(
       sumDisfluencyPerSilence,
       postProcessingList,
     ),
+
     avgSilencePerVideoLength: analyticAverageFunction(
       sumSilencePerVideoLength,
       postProcessingList,
     ),
+    
     totalVideo: postProcessingList.length,
   };
   return analyticObject;

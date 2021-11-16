@@ -14,7 +14,7 @@ export interface PostProcessingInterface {
   avg_wpm: number;
   silence: { total_silence: number; silence_list: [] };
   // eslint-disable-next-line @typescript-eslint/ban-types
-  hestiation_: { marker: object; total_count: string };
+  hestiation_: { marker: object; total_count: number };
   hestiation_duration: number;
   total_words: number;
   word_frequency: { word: []; bigram: [] };

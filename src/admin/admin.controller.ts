@@ -1,7 +1,9 @@
 import {
+  Body,
   Controller,
   ForbiddenException,
   Get,
+  Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -11,6 +13,8 @@ import { RecordService } from 'src/records/record.service';
 import { AnalyticService } from 'src/analytic/analytic.service';
 import { Put } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { BaselineService } from './baseline.service';
+import { BaselineInterface } from './baseline.interface';
 
 @Controller()
 export class AdminController {
@@ -18,6 +22,7 @@ export class AdminController {
     private readonly adminService: AdminService,
     private readonly recordService: RecordService,
     private readonly analyticService: AnalyticService,
+    private readonly baselineService: BaselineService,
   ) {}
 
   isAdmin(userType: string) {
@@ -53,11 +58,11 @@ export class AdminController {
     const avgStatResult = await this.analyticService.find(
       {},
       { lastVideoUUID: 0 },
-      { sort: { createDate: -1 }},
+      { sort: { createDate: -1 } },
     );
     return avgStatResult;
   }
-  
+
   @Put('/v2/admin/newAvgStat')
   @UseGuards(JwtAuthGuard)
   async newAvgStat(@Req() req: any) {
@@ -86,5 +91,12 @@ export class AdminController {
     }
 
     return this.analyticService.create(recordDocumentList);
+  }
+
+  @Post('/v2/admin/setBaseline')
+  @UseGuards(JwtAuthGuard)
+  async setBaseline(@Req() req: any, @Body() baselineBody: BaselineInterface) {
+    this.isAdmin(req.user.type);
+    return await this.baselineService.create(baselineBody);
   }
 }

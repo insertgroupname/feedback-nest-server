@@ -1,18 +1,16 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Timestamp } from 'typeorm';
 import { Document } from 'mongoose';
 
-export type AnalyticDocument = Analytic & Document;
+export type BaselineDocument = Baseline & Document;
 
 @Schema()
-export class Analytic {
+export class Baseline {
   @Prop({ default: () => new Date() })
   createDate: Date;
 
   @Prop()
   avgWPM: number;
-
-  @Prop()
-  avgDisfluencyCount: number;
   
   @Prop()
   avgDisfluencyPerTotalWord: number;
@@ -25,12 +23,7 @@ export class Analytic {
 
   @Prop()
   avgSilencePerVideoLength: number;
-
-  @Prop()
-  totalVideo: number;
-
-  @Prop()
-  lastVideoUUID: string;
+  
 }
 
-export const AnalyticSchema = SchemaFactory.createForClass(Analytic);
+export const BaselineSchema = SchemaFactory.createForClass(Baseline);
