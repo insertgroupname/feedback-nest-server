@@ -6,6 +6,7 @@ import { RecordModule } from 'src/records/record.module';
 import { AnalyticModule } from 'src/analytic/analytic.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Baseline, BaselineSchema } from './schemas/baseline.schema';
+import { BaselineService } from './baseline.service';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { Baseline, BaselineSchema } from './schemas/baseline.schema';
     ]),
   ],
   controllers: [AdminController],
-  providers: [AdminService],
+  providers: [AdminService, BaselineService],
 })
 export class AdminModule {}
