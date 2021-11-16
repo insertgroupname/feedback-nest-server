@@ -22,4 +22,5 @@ export interface PostProcessingInterface {
   vocab: object;
   repeat_list: object;
   keyword: string[];
+  videoUUID?: string;
 }

@@ -4,7 +4,7 @@ import { Model, QueryOptions } from 'mongoose';
 import { PostProcessingInterface } from 'src/records/report.interface';
 
 import { RecordDocument } from 'src/records/schemas/record.schema';
-import { AnalyticInterface } from './analytic.interface';
+import { AverageAnalyticInterface } from './analytic.interface';
 import { Analytic, AnalyticDocument } from './schemas/analytic.schema';
 import * as af from './analytic.formula';
 @Injectable()
@@ -16,7 +16,7 @@ export class AnalyticService {
   async create(recordDocumentList: RecordDocument[]) {
     const postProcessingList: PostProcessingInterface[] =
       recordDocumentList.map((record) => record.report.postProcessing);
-    const analyticObject: AnalyticInterface =
+    const analyticObject: AverageAnalyticInterface =
       af.doAllAverage(postProcessingList);
     analyticObject.lastVideoUUID = recordDocumentList[0].videoUUID;
     return this.analyticModel.create(analyticObject);

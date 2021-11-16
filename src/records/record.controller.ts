@@ -34,7 +34,11 @@ import {
 import { videoUploadOption } from './video-upload.option';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 import { PostProcessingInterface } from './report.interface';
-import { doAllAverage } from 'src/analytic/analytic.formula';
+import {
+  doAllAnalytic,
+  doAllAverage,
+  doAvgScoring,
+} from 'src/analytic/analytic.formula';
 
 @Controller()
 export class RecordController {
@@ -102,16 +106,25 @@ export class RecordController {
         : { userId: req.user.userId, tags: req.query.tag };
     const recordBytagsList = await this.recordService.findAll(
       queryObject,
-      { 'report.postProcessing': 1 },
+      { 'report.postProcessing': 1, videoUUID: 1 },
       { sorts: { createDate: -1 } },
     );
 
     const postProcessingList: PostProcessingInterface[] = recordBytagsList.map(
-      (record) => record.report.postProcessing,
+      (record) => {
+        let postProcessing = record.report.postProcessing;
+        return { ...postProcessing, videoUUID: record.videoUUID };
+      },
     );
 
     const avgResult = doAllAverage(postProcessingList);
-    return avgResult;
+    const scoringResult = doAvgScoring(avgResult);
+    const allVideoAnalytic = doAllAnalytic(postProcessingList);
+    return {
+      avgResult: avgResult,
+      scoringResult: scoringResult,
+      allVideoAnalytic: allVideoAnalytic,
+    };
   }
 
   /* specific video */
