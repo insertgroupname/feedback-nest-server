@@ -26,7 +26,11 @@ import glob from 'glob';
 
 import { Record } from './schemas/record.schema';
 import { RecordService } from './record.service';
-import { RecordInterface, UpdateInterface } from './record.interface';
+import {
+  GetTagInterface,
+  RecordInterface,
+  UpdateInterface,
+} from './record.interface';
 import { videoUploadOption } from './video-upload.option';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
 
@@ -39,6 +43,20 @@ export class RecordController {
       throw new BadRequestException('not found or unauthorized');
     }
     return obj;
+  }
+
+  /* landing page */
+  @Get('/v2/record/landing')
+  @UseGuards(JwtAuthGuard)
+  async landingPage(@Req() req: any): Promise<Record[] | Error> {
+    const requestedDocument = this.checkNull(
+      await this.recordService.findAll(
+        { userId: req.user.userId },
+        { report: 0, userId: 0 },
+        { createDate: -1 },
+      ),
+    );
+    return requestedDocument;
   }
 
   /* record tag */
@@ -72,22 +90,19 @@ export class RecordController {
     return { modifiedRecord: updatedRecord.modifiedCount };
   }
 
-  /* landing page */
-  @Get('/v2/record/landing')
+  @Get('/v2/record/report/analytic')
   @UseGuards(JwtAuthGuard)
-  async landingPage(@Req() req: any): Promise<Record[] | Error> {
-    const requestedDocument = this.checkNull(
-      await this.recordService.findAll(
-        { userId: req.user.userId },
-        { report: 0, userId: 0 },
-        { createDate: -1 },
-      ),
+  async getUserAnalytic(@Body() tagBody: GetTagInterface) {
+    const tag: string = tagBody.tags ? tagBody.tags : 'all';
+
+    const recordBytagsResult = this.recordService.findAll(
+      tag === 'all' ? {} : { tags: [tag] },
     );
-    return requestedDocument;
+
+    return;
   }
 
   /* specific video */
-
   @Get('/v2/record/report/:videoUUID')
   @UseGuards(JwtAuthGuard)
   async selectRecord(

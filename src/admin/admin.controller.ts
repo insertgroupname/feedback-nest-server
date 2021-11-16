@@ -52,8 +52,8 @@ export class AdminController {
     this.isAdmin(req.user.type);
     const avgStatResult = await this.analyticService.find(
       {},
-      { videoUUID: -1 },
-      { sort: { createDate: -1 }, limit: 1 },
+      { lastVideoUUID: 0 },
+      { sort: { createDate: -1 }},
     );
     return avgStatResult;
   }

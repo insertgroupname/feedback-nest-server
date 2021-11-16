@@ -15,3 +15,7 @@ export interface UpdateInterface {
   tags?: string[];
   description?: string;
 }
+
+export interface GetTagInterface {
+  tags: string;
+}
