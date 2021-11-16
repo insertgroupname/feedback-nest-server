@@ -29,6 +29,10 @@ export class RecordService {
   async findById(id: string): Promise<Record> {
     return await this.recordModel.findById(id);
   }
+  
+  async findOneAndDelete(filterObject: any) {
+    return await this.recordModel.findOneAndDelete(filterObject);
+  }
 
   async insertOne(insertObject: any): Promise<Record[]> {
     return await this.recordModel.insertMany(insertObject);
@@ -38,7 +42,7 @@ export class RecordService {
     return await this.recordModel.updateOne(filterObject, updateObject);
   }
 
-  async findOneAndDelete(filterObject: any) {
-    return await this.recordModel.findOneAndDelete(filterObject);
+  async updateAll(filterObject: any, updateObject: any, queryOptions?: QueryOptions) {
+    return await this.recordModel.updateMany(filterObject, updateObject, queryOptions || {});
   }
 }

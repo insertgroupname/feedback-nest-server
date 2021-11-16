@@ -47,18 +47,6 @@ export class AuthController {
     return res.json({ createdUser: createdUserObj });
   }
 
-  @Get('/v2/user/data')
-  @UseGuards(JwtAuthGuard)
-  async getUserData(@Req() req: any) {
-    const result = await this.userService.findOne(
-      {
-        _id: req.user.userId,
-      },
-      { password: 0, _id: 0 },
-    );
-    return result;
-  }
-
   @Post('/v2/login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const user = await this.userService.findOne({ email: loginDto.email });
@@ -85,15 +73,4 @@ export class AuthController {
     );
   }
 
-  @Patch('/v2/user/data/edit')
-  @UseGuards(JwtAuthGuard)
-  async updateStopwordOrTags(
-    @Req() req: any,
-    @Body() updateBody: UpdateInterface,
-  ) {
-    return await this.userService.updateOne(
-      { _id: req.user.userId },
-      { $set: { ...updateBody } },
-    );
-  }
 }

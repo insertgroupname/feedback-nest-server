@@ -41,10 +41,23 @@ export class AdminController {
     const postProcessingResult = await this.recordService.findAll(
       {},
       { 'report.postProcessing': 1 },
+      { sorts: { createDate: -1 } },
     );
     return postProcessingResult;
   }
 
+  @Get('/v2/admin/allAvg')
+  @UseGuards(JwtAuthGuard)
+  async getAllAvgAnalytic(@Req() req: any) {
+    this.isAdmin(req.user.type);
+    const avgStatResult = await this.analyticService.find(
+      {},
+      { videoUUID: -1 },
+      { sort: { createDate: -1 }, limit: 1 },
+    );
+    return avgStatResult;
+  }
+  
   @Put('/v2/admin/newAvgStat')
   @UseGuards(JwtAuthGuard)
   async newAvgStat(@Req() req: any) {
@@ -64,7 +77,6 @@ export class AdminController {
       { lastVideoUUID: 1 },
       { sort: { createDate: -1, limit: 1 } },
     );
-    console.log(lastAnalytic.pop().lastVideoUUID);
     if (
       !recordDocumentList.length ||
       (lastAnalytic.length &&

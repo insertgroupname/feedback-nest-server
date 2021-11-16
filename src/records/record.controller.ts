@@ -65,10 +65,11 @@ export class RecordController {
     @Req() req: any,
     @Body() updateBody: UpdateInterface,
   ) {
-    return await this.recordService.updateOne(
+    const updatedRecord = await this.recordService.updateOne(
       { userId: req.user.userId, videoUUID: new RegExp(videoUUID, 'i') },
       { $set: { ...updateBody, lastUpdate: new Date() } },
     );
+    return { modifiedRecord: updatedRecord.modifiedCount };
   }
 
   /* landing page */
