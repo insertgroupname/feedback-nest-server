@@ -1,5 +1,6 @@
 import { PostProcessingInterface } from 'src/records/report.interface';
 import { RecordDocument } from 'src/records/schemas/record.schema';
+import { AnalyticInterface } from './analytic.interface';
 import { AnalyticDocument } from './schemas/analytic.schema';
 
 export const sumAvgWPM = (sum, postProcessing: PostProcessingInterface) =>
@@ -33,6 +34,30 @@ export const analyticAverageFunction = (
   formula: any,
   postProcessingList: PostProcessingInterface[] | any,
 ) => {
-  const avg = postProcessingList.reduce(formula,0) / postProcessingList.length;
+  const avg = postProcessingList.reduce(formula, 0) / postProcessingList.length;
   return avg;
+};
+
+export const doAllAverage = (postProcessingList: PostProcessingInterface[]) => {
+  const analyticObject: AnalyticInterface = {
+    avgWPM: analyticAverageFunction(sumAvgWPM, postProcessingList),
+    avgDisfluencyCount: analyticAverageFunction(
+      sumDisfluencyCount,
+      postProcessingList,
+    ),
+    avgDisfluencyPerVideoLength: analyticAverageFunction(
+      sumDisfluencyPerVideoLength,
+      postProcessingList,
+    ),
+    avgDisfluencyPerSilence: analyticAverageFunction(
+      sumDisfluencyPerSilence,
+      postProcessingList,
+    ),
+    avgSilencePerVideoLength: analyticAverageFunction(
+      sumSilencePerVideoLength,
+      postProcessingList,
+    ),
+    totalVideo: postProcessingList.length,
+  };
+  return analyticObject;
 };

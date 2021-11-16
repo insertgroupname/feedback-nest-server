@@ -5,5 +5,5 @@ export interface AnalyticInterface {
   avgDisfluencyPerSilence: number;
   avgSilencePerVideoLength: number;
   totalVideo: number;
-  lastVideoUUID: string;
+  lastVideoUUID?: string;
 }

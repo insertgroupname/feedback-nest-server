@@ -33,6 +33,8 @@ import {
 } from './record.interface';
 import { videoUploadOption } from './video-upload.option';
 import { JwtAuthGuard } from 'src/auth/jwt.auth-guard';
+import { PostProcessingInterface } from './report.interface';
+import { doAllAverage } from 'src/analytic/analytic.formula';
 
 @Controller()
 export class RecordController {
@@ -90,16 +92,23 @@ export class RecordController {
     return { modifiedRecord: updatedRecord.modifiedCount };
   }
 
-  @Get('/v2/record/report/analytic')
+  @Get('/v2/record/report/analytic/')
   @UseGuards(JwtAuthGuard)
-  async getUserAnalytic(@Body() tagBody: GetTagInterface) {
-    const tag: string = tagBody.tags ? tagBody.tags : 'all';
-
-    const recordBytagsResult = this.recordService.findAll(
-      tag === 'all' ? {} : { tags: [tag] },
+  async getUserAnalytic(@Req() req: any) {
+    const tag = req.query.tag;
+    const queryObject = !tag || tag === 'all' ? {} : { tags: req.query.tag };
+    const recordBytagsList = await this.recordService.findAll(
+      queryObject,
+      { 'report.postProcessing': 1 },
+      { sorts: { createDate: -1 } },
     );
 
-    return;
+    const postProcessingList: PostProcessingInterface[] = recordBytagsList.map(
+      (record) => record.report.postProcessing,
+    );
+
+    const avgResult = doAllAverage(postProcessingList);
+    return avgResult;
   }
 
   /* specific video */

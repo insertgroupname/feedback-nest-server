@@ -16,27 +16,9 @@ export class AnalyticService {
   async create(recordDocumentList: RecordDocument[]) {
     const postProcessingList: PostProcessingInterface[] =
       recordDocumentList.map((record) => record.report.postProcessing);
-    const analyticObject: AnalyticInterface = {
-      avgWPM: af.analyticAverageFunction(af.sumAvgWPM, postProcessingList),
-      avgDisfluencyCount: af.analyticAverageFunction(
-        af.sumDisfluencyCount,
-        postProcessingList,
-      ),
-      avgDisfluencyPerVideoLength: af.analyticAverageFunction(
-        af.sumDisfluencyPerVideoLength,
-        postProcessingList,
-      ),
-      avgDisfluencyPerSilence: af.analyticAverageFunction(
-        af.sumDisfluencyPerSilence,
-        postProcessingList,
-      ),
-      avgSilencePerVideoLength: af.analyticAverageFunction(
-        af.sumSilencePerVideoLength,
-        postProcessingList,
-      ),
-      totalVideo: postProcessingList.length,
-      lastVideoUUID: recordDocumentList[0].videoUUID,
-    };
+    const analyticObject: AnalyticInterface =
+      af.doAllAverage(postProcessingList);
+    analyticObject.lastVideoUUID = recordDocumentList[0].videoUUID;
     return this.analyticModel.create(analyticObject);
   }
 
