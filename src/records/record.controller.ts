@@ -109,6 +109,10 @@ export class RecordController {
       { 'report.postProcessing': 1, videoUUID: 1 },
       { sorts: { createDate: -1 } },
     );
+    
+    if(!recordBytagsList.length){
+      return 'insufficient record'
+    }
 
     const postProcessingList: PostProcessingInterface[] = recordBytagsList.map(
       (record) => {
