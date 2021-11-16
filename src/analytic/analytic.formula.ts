@@ -130,6 +130,7 @@ export const doAvgScoring = (avgAnalytic: AverageAnalyticInterface) => {
     hesitationDurationScore: hesitationScoring(avgAnalytic.avgDisfluencyPerVideoLength),
     silenceDurationScore: silenceScoring(avgAnalytic.avgSilencePerVideoLength)
   };
+  return scoreObject;
 };
 
 export const doAllAnalytic = (
