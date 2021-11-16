@@ -2,7 +2,7 @@ import { Controller, Get, Post } from '@nestjs/common';
 import { AnalyticService } from './analytic.service';
 import { RecordService } from 'src/records/record.service';
 
-@Controller('analytic')
+@Controller()
 export class AnalyticController {
   constructor(
     private readonly analyticService: AnalyticService,
@@ -13,7 +13,7 @@ export class AnalyticController {
   async getAverageStat() {
     const avgStatResult = await this.analyticService.find(
       {},
-      { videoUUID: -1 },
+      { lastVideoUUID: 0 },
       { sort: { createDate: -1 }, limit: 1 },
     );
 
