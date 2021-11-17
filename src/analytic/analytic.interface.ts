@@ -16,7 +16,7 @@ export interface ScoringInterface {
 }
 
 export interface AllVideoAnalyticInterface {
-  wpm: { videoUUID: string; avgWPM: number }[];
+  wpm: { videoUUID: string; videoName: string; avgWPM: number }[];
   disfluencyPerTotalWord: {
     videoUUID: string;
     videoName: string;

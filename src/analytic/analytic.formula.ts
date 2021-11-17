@@ -146,10 +146,12 @@ export const doAllAnalytic = (
   postProcessingList.map((postProcessing) => {
     totalAnalytic.wpm.push({
       videoUUID: postProcessing.videoUUID,
+      videoName: postProcessing.videoName,
       avgWPM: postProcessing.avg_wpm,
     });
     totalAnalytic.disfluencyPerTotalWord.push({
-      videoUUID: postProcessing.videoUUID,videoName: postProcessing.videoName,
+      videoUUID: postProcessing.videoUUID,
+      videoName: postProcessing.videoName,
       disfluencyCount: postProcessing.hestiation_.total_count,
       totalWord: postProcessing.total_words,
       disfluencyPerTotalWord:
@@ -161,7 +163,7 @@ export const doAllAnalytic = (
       disfluencyDuration: postProcessing.hestiation_duration,
       videoLength: postProcessing.video_len,
       disfluencyPerVideoLength:
-      postProcessing.hestiation_duration / postProcessing.video_len,
+        postProcessing.hestiation_duration / postProcessing.video_len,
     });
     totalAnalytic.disfluencyPerSilence.push({
       videoUUID: postProcessing.videoUUID,
