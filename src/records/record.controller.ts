@@ -106,7 +106,7 @@ export class RecordController {
         : { userId: req.user.userId, status: 'Done', tags: req.query.tag };
     const recordBytagsList = await this.recordService.findAll(
       queryObject,
-      { 'report.postProcessing': 1, videoUUID: 1 },
+      { 'report.postProcessing': 1, videoUUID: 1, videoName: 1 },
       { sorts: { createDate: -1 }, collation: { locale: 'en', strength: 2 } },
     );
 

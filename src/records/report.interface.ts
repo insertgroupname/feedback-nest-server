@@ -23,4 +23,5 @@ export interface PostProcessingInterface {
   repeat_list: object;
   keyword: string[];
   videoUUID?: string;
+  videoName?: string;
 }

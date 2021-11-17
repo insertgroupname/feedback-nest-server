@@ -149,7 +149,7 @@ export const doAllAnalytic = (
       avgWPM: postProcessing.avg_wpm,
     });
     totalAnalytic.disfluencyPerTotalWord.push({
-      videoUUID: postProcessing.videoUUID,
+      videoUUID: postProcessing.videoUUID,videoName: postProcessing.videoName,
       disfluencyCount: postProcessing.hestiation_.total_count,
       totalWord: postProcessing.total_words,
       disfluencyPerTotalWord:
@@ -157,6 +157,7 @@ export const doAllAnalytic = (
     });
     totalAnalytic.disfluencyPerVideoLength.push({
       videoUUID: postProcessing.videoUUID,
+      videoName: postProcessing.videoName,
       disfluencyDuration: postProcessing.hestiation_duration,
       videoLength: postProcessing.video_len,
       disfluencyPerVideoLength:
@@ -164,6 +165,7 @@ export const doAllAnalytic = (
     });
     totalAnalytic.disfluencyPerSilence.push({
       videoUUID: postProcessing.videoUUID,
+      videoName: postProcessing.videoName,
       silenceDuration: postProcessing.silence.total_silence,
       disfluencyDuration: postProcessing.hestiation_duration,
       disfluencyPersilenceDuration:
@@ -172,6 +174,7 @@ export const doAllAnalytic = (
     });
     totalAnalytic.silencePerVideoLength.push({
       videoUUID: postProcessing.videoUUID,
+      videoName: postProcessing.videoName,
       silenceDuration: postProcessing.silence.total_silence,
       videoLength: postProcessing.video_len,
       silencePerVideoLength:
