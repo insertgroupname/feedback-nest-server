@@ -102,8 +102,8 @@ export class RecordController {
     const tag = req.query.tag;
     const queryObject =
       !tag || tag === 'all'
-        ? { userId: req.user.userId, status: 'done' }
-        : { userId: req.user.userId, status: 'done',tags: req.query.tag };
+        ? { userId: req.user.userId, status: 'Done' }
+        : { userId: req.user.userId, status: 'Done', tags: req.query.tag };
     const recordBytagsList = await this.recordService.findAll(
       queryObject,
       { 'report.postProcessing': 1, videoUUID: 1 },
