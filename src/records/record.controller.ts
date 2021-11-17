@@ -107,7 +107,7 @@ export class RecordController {
     const recordBytagsList = await this.recordService.findAll(
       queryObject,
       { 'report.postProcessing': 1, videoUUID: 1 },
-      { sorts: { createDate: -1 } },
+      { sorts: { createDate: -1 }, collation: { locale: 'en', strength: 2 } },
     );
 
     if (!recordBytagsList.length) {
