@@ -102,16 +102,16 @@ export class RecordController {
     const tag = req.query.tag;
     const queryObject =
       !tag || tag === 'all'
-        ? { userId: req.user.userId }
-        : { userId: req.user.userId, tags: req.query.tag };
+        ? { userId: req.user.userId, status: 'done' }
+        : { userId: req.user.userId, status: 'done',tags: req.query.tag };
     const recordBytagsList = await this.recordService.findAll(
       queryObject,
       { 'report.postProcessing': 1, videoUUID: 1 },
       { sorts: { createDate: -1 } },
     );
-    
-    if(!recordBytagsList.length){
-      return 'insufficient record'
+
+    if (!recordBytagsList.length) {
+      return 'insufficient record';
     }
 
     const postProcessingList: PostProcessingInterface[] = recordBytagsList.map(
