@@ -99,4 +99,25 @@ export class AdminController {
     this.isAdmin(req.user.type);
     return await this.baselineService.create(baselineBody);
   }
+
+  @Get('/v2/admin/allBaseline')
+  @UseGuards(JwtAuthGuard)
+  async getAllBaseline(@Req() req: any) {
+    this.isAdmin(req.user.type);
+    return await this.baselineService.findAll(
+      {},
+      {},
+      { sort: { createDate: -1 } },
+    );
+  }
+
+  @Get('/v2/baseline')
+  @UseGuards(JwtAuthGuard)
+  async getBaseline(@Req() req: any) {
+    return await this.baselineService.findAll(
+      {},
+      {},
+      { sort: { createDate: -1 }, limit: 1 },
+    )[0];
+  }
 }
