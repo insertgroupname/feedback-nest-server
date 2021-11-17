@@ -117,7 +117,7 @@ export class RecordController {
     const postProcessingList: PostProcessingInterface[] = recordBytagsList.map(
       (record) => {
         let postProcessing = record.report.postProcessing;
-        return { ...postProcessing, videoUUID: record.videoUUID };
+        return { ...postProcessing, videoUUID: record.videoUUID, videoName: record.videoName };
       },
     );
 
