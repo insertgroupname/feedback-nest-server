@@ -11,7 +11,7 @@ export class Baseline {
 
   @Prop()
   avgWPM: number;
-  
+
   @Prop()
   avgDisfluencyPerTotalWord: number;
 
@@ -23,7 +23,20 @@ export class Baseline {
 
   @Prop()
   avgSilencePerVideoLength: number;
-  
+
+  @Prop({
+    Default: () => [
+      [0, 59],
+      [60, 139],
+      [140, 170],
+      [171, 200],
+      [201, 500],
+    ],
+  })
+  WPMrange: number[][];
+
+  @Prop({ default: () => 2 })
+  acceptableDisfluencyPerMinut: number;
 }
 
 export const BaselineSchema = SchemaFactory.createForClass(Baseline);
