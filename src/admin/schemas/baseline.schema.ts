@@ -9,19 +9,19 @@ export class Baseline {
   @Prop({ default: () => new Date() })
   createDate: Date;
 
-  @Prop()
+  @Prop({ required: true })
   avgWPM: number;
 
-  @Prop()
+  @Prop({ required: true })
   avgDisfluencyPerTotalWord: number;
 
-  @Prop()
+  @Prop({ required: true })
   avgDisfluencyPerVideoLength: number;
 
-  @Prop()
+  @Prop({ required: true })
   avgDisfluencyPerSilence: number;
 
-  @Prop()
+  @Prop({ required: true })
   avgSilencePerVideoLength: number;
 
   @Prop({
