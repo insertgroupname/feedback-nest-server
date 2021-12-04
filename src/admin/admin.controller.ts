@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   ForbiddenException,
@@ -97,6 +98,26 @@ export class AdminController {
   @UseGuards(JwtAuthGuard)
   async setBaseline(@Req() req: any, @Body() baselineBody: BaselineInterface) {
     this.isAdmin(req.user.type);
+    if (baselineBody.WPMrange && baselineBody.WPMrange.length > 5) {
+      baselineBody.WPMrange = baselineBody.WPMrange.slice(0, 5);
+    }
+    if (baselineBody.WPMrange && baselineBody.WPMrange.length < 5) {
+      throw new BadRequestException('require WPMrange of 5 range');
+    }
+    if (baselineBody.WPMrange) {
+      const WPMrange = baselineBody.WPMrange;
+      for (let range = 0; range < WPMrange.length - 1; range++) {
+        if (
+          !(
+            WPMrange[range][0] < WPMrange[range][1] &&
+            WPMrange[range][1] < WPMrange[range + 1][0] &&
+            WPMrange[range + 1][0] < WPMrange[range + 1][1]
+          )
+        ) {
+          throw new BadRequestException('Bad WPMrange collapse');
+        }
+      }
+    }
     return await this.baselineService.create(baselineBody);
   }
 
@@ -114,10 +135,14 @@ export class AdminController {
   @Get('/v2/baseline')
   @UseGuards(JwtAuthGuard)
   async getBaseline(@Req() req: any) {
-    return await this.baselineService.findAll(
+    const baseline = await this.baselineService.findAll(
       {},
       {},
       { sort: { createDate: -1 }, limit: 1 },
-    )[0];
+    );
+    if (!baseline) {
+      return 'no result';
+    }
+    return baseline.pop();
   }
 }

@@ -4,6 +4,6 @@ export interface BaselineInterface {
   avgDisfluencyPerVideoLength: number;
   avgDisfluencyPerSilence: number;
   avgSilencePerVideoLength: number;
-  WPMrange: number[][5];
-  acceptableDisfluencyPerMinut: number; 
+  WPMrange: number[][];
+  acceptableDisfluencyPerMinut: number;
 }

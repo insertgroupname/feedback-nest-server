@@ -25,13 +25,15 @@ export class Baseline {
   avgSilencePerVideoLength: number;
 
   @Prop({
-    Default: () => [
-      [0, 59],
-      [60, 139],
-      [140, 170],
-      [171, 200],
-      [201, 500],
-    ],
+    default: () => {
+      return [
+        [0, 59],
+        [60, 139],
+        [140, 170],
+        [171, 200],
+        [201, 500],
+      ];
+    },
   })
   WPMrange: number[][];
 

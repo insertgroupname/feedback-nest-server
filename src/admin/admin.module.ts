@@ -10,12 +10,12 @@ import { BaselineService } from './baseline.service';
 
 @Module({
   imports: [
-    RecordModule,
-    AnalyticModule,
-    ScheduleModule.forRoot(),
     MongooseModule.forFeature([
       { name: Baseline.name, schema: BaselineSchema, collection: 'baseline' },
     ]),
+    RecordModule,
+    AnalyticModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AdminController],
   providers: [AdminService, BaselineService],
