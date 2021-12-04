@@ -111,7 +111,7 @@ export class AdminController {
     );
   }
 
-  @Get('/v2/api/baseline')
+  @Get('/v2/baseline')
   @UseGuards(JwtAuthGuard)
   async getBaseline(@Req() req: any) {
     return await this.baselineService.findAll(
