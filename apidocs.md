@@ -1,5 +1,46 @@
 # API Docs
 
+## Note
+
+- The **`*multiple`** mark is multiple object that have similar object pattern but dynamic key.
+
+  - for example
+
+  ```json
+  "marker": {
+    *multiple [string]: {
+    "hes_count": number,
+    "words": <number | string>[][],
+  }
+  ```
+
+  it may appear as below
+
+  ```json
+  "marker": {
+    "50.75-101.5": {
+      "hes_count": 1,
+      "words": [
+        [
+          "%HESITATION",
+          88.04,
+          88.23
+        ]
+      ]
+    },
+    "101.5-152.25": {
+      "hes_count": 1,
+      "words": [
+        [
+          "%HESITATION",
+          138.5,
+          138.66
+        ]
+      ]
+    }
+  }
+  ```
+
 ## baseroute `/api`
 
 ### Auth
@@ -437,13 +478,8 @@
 
     ```json
     {
-      "_id": "61ace6cdcb8fcc92affbcad7",
+      "_id": string,
       "WPMrange": number[][],
-      "avgSilencePerVideoLength": number,
-      "avgDisfluencyPerSilence": number,
-      "avgDisfluencyPerVideoLength": number,
-      "avgDisfluencyPerTotalWord": number,
-      "avgWPM": number,
       "acceptableDisfluencyPerMinut": number,
       "createDate": Date,
     },
@@ -459,18 +495,15 @@
 
     ```json
     {
-      "avgWPM": number,
-      "avgDisfluencyPerTotalWord": number,
-      "avgDisfluencyPerVideoLength": number,
-      "avgDisfluencyPerSilence": number,
-      "avgSilencePerVideoLength": number,
-      "WPMrange": number[][]
+      "WPMrange": number[][],
+      "acceptableDisfluencyPerMinut": number,
     }
     ```
 
 - Make a new average stat
 
   - make a new global average stat across the records in the server
-    - It may do nothing if there is no new record.
+
+    - It may not do anything if there is no new record.
 
     > PUT `/v2/admin/newAvgStat`
