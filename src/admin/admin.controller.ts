@@ -141,7 +141,7 @@ export class AdminController {
       { sort: { createDate: -1 }, limit: 1 },
     );
     if (!baseline) {
-      return 'no result';
+      return 'no baseline shown in server';
     }
     return baseline.pop();
   }

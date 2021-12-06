@@ -81,21 +81,6 @@ export class RecordController {
     return requestedDocument;
   }
 
-  /* update tag */
-  @Patch('/v2/record/report/:videoUUID')
-  @UseGuards(JwtAuthGuard)
-  async updateTag(
-    @Param('videoUUID') videoUUID,
-    @Req() req: any,
-    @Body() updateBody: UpdateInterface,
-  ) {
-    const updatedRecord = await this.recordService.updateOne(
-      { userId: req.user.userId, videoUUID: new RegExp(videoUUID, 'i') },
-      { $set: { ...updateBody, lastUpdate: new Date() } },
-    );
-    return { modifiedRecord: updatedRecord.modifiedCount };
-  }
-
   @Get('/v2/record/report/analytic/')
   @UseGuards(JwtAuthGuard)
   async getUserAnalytic(@Req() req: any) {
@@ -130,6 +115,22 @@ export class RecordController {
       allVideoAnalytic: allVideoAnalytic,
     };
   }
+
+  /* update tag */
+  @Patch('/v2/record/report/:videoUUID')
+  @UseGuards(JwtAuthGuard)
+  async updateTag(
+    @Param('videoUUID') videoUUID,
+    @Req() req: any,
+    @Body() updateBody: UpdateInterface,
+  ) {
+    const updatedRecord = await this.recordService.updateOne(
+      { userId: req.user.userId, videoUUID: new RegExp(videoUUID, 'i') },
+      { $set: { ...updateBody, lastUpdate: new Date() } },
+    );
+    return { modifiedRecord: updatedRecord.modifiedCount };
+  }
+
 
   /* specific video */
   @Get('/v2/record/report/:videoUUID')
@@ -177,34 +178,7 @@ export class RecordController {
     }
     return 'nothing has been deleted';
   }
-
-  /* upload */
-  @Post('/v2/upload')
-  @HttpCode(201)
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('file', videoUploadOption()))
-  async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() uploadDetail: RecordInterface,
-    @Req() req: any,
-  ) {
-    if (!uploadDetail.videoName) {
-      uploadDetail.videoName =
-        file.originalname + '.' + file.originalname.split('.').pop();
-    }
-    uploadDetail.userId = req.user.userId;
-    uploadDetail.videoUUID = file.filename;
-    uploadDetail.stopwords = req.user.stopwords;
-    uploadDetail.status = 'waiting_for_process_transcript';
-    const createResult = await this.createRecord(uploadDetail);
-    axios({
-      method: 'post',
-      url: `http://python-server:5000/convert_sound`,
-      params: { file_name: file.filename },
-    });
-    return createResult;
-  }
-
+  
   /* streaming */
   @Get('/v2/record/streaming/:videoUUID')
   @UseGuards(JwtAuthGuard)
@@ -233,4 +207,32 @@ export class RecordController {
       throw new BadRequestException('content unavailable or not found');
     }
   }
+
+  /* upload */
+  @Post('/v2/upload')
+  @HttpCode(201)
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file', videoUploadOption()))
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() uploadDetail: RecordInterface,
+    @Req() req: any,
+  ) {
+    if (!uploadDetail.videoName) {
+      uploadDetail.videoName =
+        file.originalname + '.' + file.originalname.split('.').pop();
+    }
+    uploadDetail.userId = req.user.userId;
+    uploadDetail.videoUUID = file.filename;
+    uploadDetail.stopwords = req.user.stopwords;
+    uploadDetail.status = 'waiting_for_process_transcript';
+    const createResult = await this.createRecord(uploadDetail);
+    axios({
+      method: 'post',
+      url: `http://python-server:5000/convert_sound`,
+      params: { file_name: file.filename },
+    });
+    return createResult;
+  }
+
 }

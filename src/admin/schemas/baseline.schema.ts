@@ -9,20 +9,20 @@ export class Baseline {
   @Prop({ default: () => new Date() })
   createDate: Date;
 
-  @Prop({ required: true })
-  avgWPM: number;
+  // @Prop({ required: true })
+  // avgWPM: number;
 
-  @Prop({ required: true })
-  avgDisfluencyPerTotalWord: number;
+  // @Prop({ required: true })
+  // avgDisfluencyPerTotalWord: number;
 
-  @Prop({ required: true })
-  avgDisfluencyPerVideoLength: number;
+  // @Prop({ required: true })
+  // avgDisfluencyPerVideoLength: number;
 
-  @Prop({ required: true })
-  avgDisfluencyPerSilence: number;
+  // @Prop({ required: true })
+  // avgDisfluencyPerSilence: number;
 
-  @Prop({ required: true })
-  avgSilencePerVideoLength: number;
+  // @Prop({ required: true })
+  // avgSilencePerVideoLength: number;
 
   @Prop({
     default: () => {
