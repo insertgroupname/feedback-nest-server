@@ -15,14 +15,14 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost', process.env.HOSTNAME],
+    origin: ['http://localhost:3000', 'http://localhost', process.env.HOSTNAME_URL],
     credentials: true,
   });
   app.setGlobalPrefix('api');
   app.use(cookieParser());
   const config = new DocumentBuilder()
-    .setTitle('NestJS Realworld Example App')
-    .setDescription('The Realworld API description')
+    .setTitle('Feedback API docs')
+    .setDescription('Feedback for testing api docs')
     .setVersion('1.0')
     // .addBearerAuth()
     .build();
