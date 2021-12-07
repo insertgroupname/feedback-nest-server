@@ -102,7 +102,11 @@ export class RecordController {
     const postProcessingList: PostProcessingInterface[] = recordBytagsList.map(
       (record) => {
         let postProcessing = record.report.postProcessing;
-        return { ...postProcessing, videoUUID: record.videoUUID, videoName: record.videoName };
+        return {
+          ...postProcessing,
+          videoUUID: record.videoUUID,
+          videoName: record.videoName,
+        };
       },
     );
 
@@ -130,7 +134,6 @@ export class RecordController {
     );
     return { modifiedRecord: updatedRecord.modifiedCount };
   }
-
 
   /* specific video */
   @Get('/v2/record/report/:videoUUID')
@@ -178,7 +181,7 @@ export class RecordController {
     }
     return 'nothing has been deleted';
   }
-  
+
   /* streaming */
   @Get('/v2/record/streaming/:videoUUID')
   @UseGuards(JwtAuthGuard)
@@ -193,7 +196,11 @@ export class RecordController {
       videoUUID: new RegExp(videoUUID, 'i'),
     });
     if (result) {
-      const filePath = path.join('upload', 'video', videoUUID);
+      const filePath = path.join(
+        'upload',
+        'audio',
+        videoUUID.split('.')[0] + '.ogg',
+      );
       if (fs.existsSync(filePath)) {
         const file = fs.createReadStream(
           path.join('upload', 'video', videoUUID),
@@ -234,5 +241,4 @@ export class RecordController {
     });
     return createResult;
   }
-
 }
