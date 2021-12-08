@@ -233,7 +233,7 @@ export class RecordController {
       fs.unlinkSync(file.path);
       throw new NotAcceptableException("content length should not bigger than 1200 seconds")
     }
-    
+
     if (!uploadDetail.videoName) {
       uploadDetail.videoName =
         file.originalname + '.' + file.originalname.split('.').pop();
@@ -249,39 +249,5 @@ export class RecordController {
       params: { file_name: file.filename },
     });
     return createResult;
-  }
-
-  @Post('/v2/uploadTest')
-  @HttpCode(201)
-  @UseInterceptors(FileInterceptor('file', videoUploadOption()))
-  async uploadFileTest(
-    @UploadedFile() file: Express.Multer.File,
-    // @Body() uploadDetail: RecordInterface,
-    @Req() req: any,
-  ) {
-    // if (!uploadDetail.videoName) {
-    //   uploadDetail.videoName =
-    //     file.originalname + '.' + file.originalname.split('.').pop();
-    // }
-    // uploadDetail.userId = req.user.userId;
-    // uploadDetail.videoUUID = file.filename;
-    // uploadDetail.stopwords = req.user.stopwords;
-    // uploadDetail.status = 'waiting_for_process_transcript';
-    // const createResult = await this.createRecord(uploadDetail);
-    // axios({
-    //   method: 'post',
-    //   url: `http://python-server:5000/convert_sound`,
-    //   params: { file_name: file.filename },
-    // });
-    // return createResult;
-    // console.log(file.path)
-    // console.log(await getVideoDurationInSeconds(file.path));
-    // if (file.path && (await getVideoDurationInSeconds(file.path)) > 500) {
-    //   console.log('video bigger than 500 sec');
-    //   fs.unlinkSync(file.path);
-    //   throw new BadRequestException('video too big');
-    // }
-
-    return;
   }
 }
