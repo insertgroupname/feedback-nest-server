@@ -38,6 +38,7 @@
     "bcrypt": "^5.0.1",
     "cookie-parse": "^0.4.0",
     "cookie-parser": "^1.4.5",
+    "get-video-duration": "^4.0.0",
     "mongoose": "^6.0.10",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

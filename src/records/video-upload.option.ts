@@ -3,7 +3,8 @@ import short from 'short-unique-id';
 import * as fs from 'fs';
 import * as path from 'path';
 import { BadRequestException } from '@nestjs/common';
-
+import { getVideoDurationInSeconds } from 'get-video-duration';
+import { Readable } from 'stream';
 const validMime = [
   'video/mp4',
   'video/ogg',
