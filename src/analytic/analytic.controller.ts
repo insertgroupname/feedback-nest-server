@@ -6,7 +6,6 @@ import { RecordService } from 'src/records/record.service';
 export class AnalyticController {
   constructor(
     private readonly analyticService: AnalyticService,
-    private readonly recordService: RecordService,
   ) {}
 
   @Get('/v2/analytic/avgstat')

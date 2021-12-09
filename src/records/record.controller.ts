@@ -3,10 +3,12 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
   GoneException,
   HttpCode,
   HttpStatus,
+  Inject,
   NotAcceptableException,
   Param,
   Patch,
@@ -42,10 +44,16 @@ import {
 } from 'src/analytic/analytic.formula';
 
 import { getVideoDurationInSeconds } from 'get-video-duration';
+import { BaselineService } from 'src/admin/baseline.service';
+import { Baseline } from 'src/admin/schemas/baseline.schema';
 
 @Controller()
 export class RecordController {
-  constructor(private readonly recordService: RecordService) {}
+  constructor(
+    private readonly recordService: RecordService,
+    @Inject(forwardRef(() => BaselineService))
+    private readonly baselineService: BaselineService,
+  ) {}
 
   checkNull(obj: any): any | Error {
     if (!obj) {
@@ -102,6 +110,15 @@ export class RecordController {
       return 'insufficient record';
     }
 
+    const WPMrange = (
+      await this.baselineService.findAll(
+        {},
+        { WPMrange: 1 },
+        { sort: { createDate: -1 }, limit: 1 },
+      )
+    ).pop().WPMrange;
+
+    console.log(WPMrange);
     const postProcessingList: PostProcessingInterface[] = recordBytagsList.map(
       (record) => {
         let postProcessing = record.report.postProcessing;
@@ -114,7 +131,7 @@ export class RecordController {
     );
 
     const avgResult = doAllAverage(postProcessingList);
-    const scoringResult = doAvgScoring(avgResult);
+    const scoringResult = doAvgScoring(avgResult, WPMrange);
     const allVideoAnalytic = doAllAnalytic(postProcessingList);
     return {
       avgResult: avgResult,
@@ -228,10 +245,11 @@ export class RecordController {
     @Body() uploadDetail: RecordInterface,
     @Req() req: any,
   ) {
-
-    if(file.path && await getVideoDurationInSeconds(file.path) > 1200){
+    if (file.path && (await getVideoDurationInSeconds(file.path)) > 1200) {
       fs.unlinkSync(file.path);
-      throw new NotAcceptableException("content length should not bigger than 1200 seconds")
+      throw new NotAcceptableException(
+        'content length should not bigger than 1200 seconds',
+      );
     }
 
     if (!uploadDetail.videoName) {

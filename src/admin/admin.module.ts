@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
@@ -13,11 +13,12 @@ import { BaselineService } from './baseline.service';
     MongooseModule.forFeature([
       { name: Baseline.name, schema: BaselineSchema, collection: 'baseline' },
     ]),
-    RecordModule,
+    forwardRef(() => RecordModule),
     AnalyticModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AdminController],
   providers: [AdminService, BaselineService],
+  exports: [BaselineService],
 })
 export class AdminModule {}

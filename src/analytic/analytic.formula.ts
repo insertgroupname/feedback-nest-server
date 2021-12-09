@@ -81,17 +81,38 @@ export const doAllAverage = (postProcessingList: PostProcessingInterface[]) => {
   return analyticObject;
 };
 
-const wpmScoring = (wpm: number) => {
-  if (wpm < 60 || wpm > 200) {
+// [0, 59],
+// [60, 139],
+// [140, 170],
+// [171, 200],
+// [201, 500],
+
+const wpmScoring = (wpm: number, WPMrange: number[][]) => {
+  if (
+    wpm < WPMrange[0][1] ||
+    (wpm > (WPMrange[4][0] + WPMrange[4][1]) / 2 && wpm <= WPMrange[4][1])
+  ) {
     return 1;
-  } else if ((wpm >= 60 && wpm < 80) || (wpm >= 180 && wpm < 200)) {
-    return 1 + (wpm < 80 ? (wpm - 60) / 20 : (200 - wpm) / 20);
-  } else if ((wpm >= 80 && wpm < 140) || (wpm >= 170 && wpm < 180)) {
-    return 2 + (wpm < 140 ? (wpm - 80) / 60 : (180 - wpm) / 10);
-  } else if ((wpm >= 140 && wpm < 150) || (wpm > 160 && wpm < 170)) {
-    return 3 + (wpm < 150 ? (wpm - 140) / 10 : (170 - wpm) / 10);
-  } else if (wpm >= 150 && wpm <= 160) {
-    return 4 + (wpm <= 155 ? (wpm - 150) / 5 : (160 - wpm) / 5);
+  } else if (
+    (wpm >= WPMrange[0][1] && wpm < (WPMrange[1][0] + WPMrange[1][1]) / 2) ||
+    (wpm > WPMrange[3][1] && wpm <= (WPMrange[4][0] + WPMrange[4][1]) / 2)
+  ) {
+    return 2;
+  } else if (
+    (wpm >= (WPMrange[1][0] + WPMrange[1][1]) / 2 && wpm <= WPMrange[1][1]) ||
+    (wpm > (WPMrange[3][0] + WPMrange[3][1]) / 2 && wpm <= WPMrange[3][1])
+  ) {
+    return 3;
+  } else if (
+    (wpm > WPMrange[1][1] && wpm <= (WPMrange[2][0] + WPMrange[2][1]) / 2) ||
+    (wpm > WPMrange[2][1] && wpm <= (WPMrange[3][0] + WPMrange[3][1]) / 2)
+  ) {
+    return 4;
+  } else if (
+    wpm >= (WPMrange[2][0] + WPMrange[2][1]) / 2 &&
+    wpm <= WPMrange[2][1]
+  ) {
+    return 5;
   }
 };
 
@@ -124,9 +145,16 @@ const silenceScoring = (silencePerVideoLength: number) => {
 };
 
 // prettier-ignore
-export const doAvgScoring = (avgAnalytic: AverageAnalyticInterface) => {
+export const doAvgScoring = (avgAnalytic: AverageAnalyticInterface, WPMrange=[
+  [0, 59],
+  [60, 139],
+  [140, 170],
+  [171, 200],
+  [201, 500],
+]) => {
+  console.log(WPMrange)
   const scoreObject: ScoringInterface = {
-    wpmScore: wpmScoring(avgAnalytic.avgWPM),
+    wpmScore: wpmScoring(avgAnalytic.avgWPM, WPMrange),
     hesitationDurationScore: hesitationScoring(avgAnalytic.avgDisfluencyPerVideoLength),
     silenceDurationScore: silenceScoring(avgAnalytic.avgSilencePerVideoLength)
   };

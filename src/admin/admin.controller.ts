@@ -3,7 +3,9 @@ import {
   Body,
   Controller,
   ForbiddenException,
+  forwardRef,
   Get,
+  Inject,
   Post,
   Req,
   UseGuards,
@@ -21,6 +23,7 @@ import { BaselineInterface } from './baseline.interface';
 export class AdminController {
   constructor(
     private readonly adminService: AdminService,
+    @Inject(forwardRef(() => RecordService))
     private readonly recordService: RecordService,
     private readonly analyticService: AnalyticService,
     private readonly baselineService: BaselineService,

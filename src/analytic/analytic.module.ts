@@ -10,7 +10,6 @@ import { RecordModule } from 'src/records/record.module';
     MongooseModule.forFeature([
       { name: Analytic.name, schema: AnalyticSchema, collection: 'analytic' },
     ]),
-    RecordModule,
   ],
   controllers: [AnalyticController],
   providers: [AnalyticService],
