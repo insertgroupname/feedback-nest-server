@@ -29,44 +29,23 @@
 ## Installation
 
 ```bash
+$ mkdir -p upload/audio upload/video
 $ npm install
 ```
 
-## Running the app
+## run
 
 ```bash
-# development
 $ npm run start
 
-# watch mode
+# for auto reload
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
-
+## docker
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ docker-compose up -d
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
